@@ -1,3 +1,5 @@
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -save-temps" )
+
 add_llvm_component_group(ARM HAS_JIT)
 
 set(LLVM_TARGET_DEFINITIONS ARM.td)
