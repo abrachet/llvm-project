@@ -26,6 +26,9 @@ set_target_properties(llvm-driver PROPERTIES OUTPUT_NAME llvm)
 
 target_link_libraries(llvm-driver PUBLIC ${LLVM_DRIVER_OBJLIBS})
 target_link_libraries(llvm-driver PUBLIC LLVMDebuginfod)
+target_link_options(llvm-driver PRIVATE "-Wl,-y_ZTVN4llvm2cl3optINS0_13boolOrDefaultELb0ENS0_6parserIS2_EEEE")
+target_link_options(llvm-driver PRIVATE "-Wl,-y_ZN4llvm2cl3optINS0_13boolOrDefaultELb0ENS0_6parserIS2_EEEC2IJA25_cNS0_12OptionHiddenEEEEDpRKT_")
+target_link_options(llvm-driver PRIVATE "-Wl,-Map=llvm-driver.map")
 
 if(LLVM_HAVE_LIBXAR)
   # used by llvm-objdump
