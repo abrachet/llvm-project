@@ -23,6 +23,7 @@
 #include "clang/Basic/Visibility.h"
 #include "llvm/ADT/FloatingPointMode.h"
 #include "llvm/ADT/StringRef.h"
+#include "llvm/Support/Path.h"
 #include "llvm/TargetParser/Triple.h"
 #include <optional>
 #include <string>
@@ -651,7 +652,9 @@ public:
   }
 
   /// Remap path prefix according to -fmacro-prefix-path option.
-  void remapPathPrefix(SmallVectorImpl<char> &Path) const;
+  void remapPathPrefix(
+      SmallVectorImpl<char> &Path,
+      llvm::sys::path::Style Style = llvm::sys::path::Style::native) const;
 
   RoundingMode getDefaultRoundingMode() const {
     return RoundingMath ? RoundingMode::Dynamic

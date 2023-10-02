@@ -1961,13 +1961,15 @@ void Preprocessor::markMacroAsUsed(MacroInfo *MI) {
 void Preprocessor::processPathForFileMacro(SmallVectorImpl<char> &Path,
                                            const LangOptions &LangOpts,
                                            const TargetInfo &TI) {
-  LangOpts.remapPathPrefix(Path);
   if (LangOpts.UseTargetPathSeparator) {
+    auto Style = llvm::sys::path::Style::posix;
     if (TI.getTriple().isOSWindows())
-      llvm::sys::path::remove_dots(Path, false,
-                                   llvm::sys::path::Style::windows_backslash);
-    else
-      llvm::sys::path::remove_dots(Path, false, llvm::sys::path::Style::posix);
+      Style = llvm::sys::path::Style::windows_backslash;
+
+    LangOpts.remapPathPrefix(Path, Style);
+    llvm::sys::path::remove_dots(Path, false, Style);
+  } else {
+    LangOpts.remapPathPrefix(Path);
   }
 }
 

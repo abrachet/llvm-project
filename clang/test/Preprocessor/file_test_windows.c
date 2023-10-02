@@ -14,6 +14,8 @@
 // RUN: %clang -E -target x86_64-pc-linux-gnu -fmacro-prefix-map=%p\= -c -o - %s | FileCheck %s --check-prefix CHECK-REMOVE
 // RUN: %clang -E -target x86_64-pc-linux-gnu -ffile-prefix-map=%p\= -c -o - %s | FileCheck %s --check-prefix CHECK-REMOVE
 
+// RUN: %clang -E -target x86_64-pc-linux-gnu -ffile-prefix-map=%p\= -IInputs\include-file-test -c -o - %s | FileCheck %s --check-prefix CHECK-REMOVE
+
 // Clang defaults to forward slashes for the non-prefix portion of the path even if the build environment is Windows.
 // RUN: %clang -E -fno-file-reproducible -target x86_64-pc-linux-gnu -fmacro-prefix-map=%p\= -c -o - %s | FileCheck %s --check-prefix CHECK-REMOVE
 // RUN: %clang -E -fno-file-reproducible -target x86_64-pc-linux-gnu -ffile-prefix-map=%p\= -c -o - %s | FileCheck %s --check-prefix CHECK-REMOVE
@@ -22,7 +24,11 @@
 // RUN: %clang -E -ffile-reproducible -target x86_64-pc-linux-gnu -c -o - %s | FileCheck %s --check-prefix CHECK-LINUX-FULL
 
 filename: __FILE__
+#ifdef USING_INCLUDE_PATH
+#include "file_test.h"
+#else
 #include "Inputs/include-file-test/file_test.h"
+#endif
 
 // CHECK: filename: "A:\\UNLIKELY_PATH\\empty\\file_test_windows.c"
 // CHECK: filename: "A:\\UNLIKELY_PATH\\empty\\Inputs/include-file-test/file_test.h"
